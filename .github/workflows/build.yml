@@ -18,6 +18,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Enable Windows desktop
+        run: flutter config --enable-windows-desktop
+
+      - name: Create Windows platform files
+        run: flutter create --platforms=windows .
+
       - name: Create asset directories and placeholder files
         shell: pwsh
         run: |
@@ -41,16 +54,9 @@ jobs:
           [System.IO.File]::WriteAllBytes("assets/icons/tray_connected.png", $pngBytes)
           [System.IO.File]::WriteAllBytes("assets/icons/tray_disconnected.png", $pngBytes)
           
-          # 创建 ICO 文件 (Windows)
+          # 创建 ICO 文件 (Windows) - 复制 PNG 作为占位
           Copy-Item "assets/icons/app_icon.png" "assets/icons/tray_connected.ico"
           Copy-Item "assets/icons/app_icon.png" "assets/icons/tray_disconnected.ico"
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.19.0'
-          channel: 'stable'
-          cache: true
 
       - name: Get dependencies
         run: flutter pub get
@@ -76,22 +82,28 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev
 
-      - name: Create asset directories and placeholder files
-        run: |
-          mkdir -p assets/icons
-          mkdir -p assets/fonts
-          
-          # 创建最小有效 PNG
-          printf '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90wS\xde\x00\x00\x00\x0cIDATx\x9cc\xf8\xff\xff?\x00\x05\xfe\x02\xfe\xdc\xccY\xe7\x00\x00\x00\x00IEND\xaeB`\x82' > assets/icons/app_icon.png
-          cp assets/icons/app_icon.png assets/icons/tray_connected.png
-          cp assets/icons/app_icon.png assets/icons/tray_disconnected.png
-
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.19.0'
           channel: 'stable'
           cache: true
+
+      - name: Enable Linux desktop
+        run: flutter config --enable-linux-desktop
+
+      - name: Create Linux platform files
+        run: flutter create --platforms=linux .
+
+      - name: Create asset directories and placeholder files
+        run: |
+          mkdir -p assets/icons
+          mkdir -p assets/fonts
+          
+          # 创建最小有效 PNG (使用 base64)
+          echo "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" | base64 -d > assets/icons/app_icon.png
+          cp assets/icons/app_icon.png assets/icons/tray_connected.png
+          cp assets/icons/app_icon.png assets/icons/tray_disconnected.png
 
       - name: Get dependencies
         run: flutter pub get
@@ -112,22 +124,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Create asset directories and placeholder files
-        run: |
-          mkdir -p assets/icons
-          mkdir -p assets/fonts
-          
-          # 创建最小有效 PNG
-          printf '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90wS\xde\x00\x00\x00\x0cIDATx\x9cc\xf8\xff\xff?\x00\x05\xfe\x02\xfe\xdc\xccY\xe7\x00\x00\x00\x00IEND\xaeB`\x82' > assets/icons/app_icon.png
-          cp assets/icons/app_icon.png assets/icons/tray_connected.png
-          cp assets/icons/app_icon.png assets/icons/tray_disconnected.png
-
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.19.0'
           channel: 'stable'
           cache: true
+
+      - name: Enable macOS desktop
+        run: flutter config --enable-macos-desktop
+
+      - name: Create macOS platform files
+        run: flutter create --platforms=macos .
+
+      - name: Create asset directories and placeholder files
+        run: |
+          mkdir -p assets/icons
+          mkdir -p assets/fonts
+          
+          # 创建最小有效 PNG (使用 base64)
+          echo "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" | base64 -d > assets/icons/app_icon.png
+          cp assets/icons/app_icon.png assets/icons/tray_connected.png
+          cp assets/icons/app_icon.png assets/icons/tray_disconnected.png
 
       - name: Get dependencies
         run: flutter pub get
