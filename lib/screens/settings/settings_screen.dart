@@ -1,5 +1,5 @@
 // ============================================================
-// lib/screens/settings/settings_screen.dart (修复版 - 不使用 url_launcher)
+// lib/screens/settings/settings_screen.dart (中文版)
 // ============================================================
 
 import 'dart:io';
@@ -28,7 +28,7 @@ class SettingsScreen extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 4, bottom: 16),
           child: Text(
-            'Settings',
+            '设置',
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -38,7 +38,7 @@ class SettingsScreen extends StatelessWidget {
         // 外观
         _buildSection(
           context,
-          title: 'APPEARANCE',
+          title: '外观',
           children: [
             _buildThemeTile(context, settings),
           ],
@@ -48,27 +48,27 @@ class SettingsScreen extends StatelessWidget {
         // 常规
         _buildSection(
           context,
-          title: 'GENERAL',
+          title: '常规',
           children: [
             SwitchListTile(
-              title: const Text('Auto Connect'),
-              subtitle: const Text('Connect automatically on startup'),
+              title: const Text('自动连接'),
+              subtitle: const Text('启动时自动连接'),
               value: settings.autoConnect,
               onChanged: settings.setAutoConnect,
               secondary: const Icon(Icons.flash_on_outlined),
             ),
             const Divider(height: 1),
             SwitchListTile(
-              title: const Text('Minimize to Tray'),
-              subtitle: const Text('Keep running in system tray'),
+              title: const Text('最小化到托盘'),
+              subtitle: const Text('关闭窗口时保持运行'),
               value: settings.minimizeToTray,
               onChanged: settings.setMinimizeToTray,
               secondary: const Icon(Icons.minimize_outlined),
             ),
             const Divider(height: 1),
             SwitchListTile(
-              title: const Text('Launch at Startup'),
-              subtitle: const Text('Start when system boots'),
+              title: const Text('开机启动'),
+              subtitle: const Text('系统启动时自动运行'),
               value: settings.launchAtStartup,
               onChanged: settings.setLaunchAtStartup,
               secondary: const Icon(Icons.power_settings_new_outlined),
@@ -80,16 +80,16 @@ class SettingsScreen extends StatelessWidget {
         // 代理
         _buildSection(
           context,
-          title: 'PROXY',
+          title: '代理',
           children: [
             ListTile(
               leading: const Icon(Icons.lan_outlined),
-              title: const Text('SOCKS5 Port'),
+              title: const Text('SOCKS5 端口'),
               subtitle: Text(settings.socksPortStr),
               trailing: const Icon(Icons.chevron_right),
               onTap: () => _editPort(
                 context,
-                'SOCKS5 Port',
+                'SOCKS5 端口',
                 settings.socksPort,
                 (v) => settings.setSocksPort(v),
               ),
@@ -97,20 +97,20 @@ class SettingsScreen extends StatelessWidget {
             const Divider(height: 1),
             ListTile(
               leading: const Icon(Icons.http_outlined),
-              title: const Text('HTTP Port'),
+              title: const Text('HTTP 端口'),
               subtitle: Text(settings.httpPortStr),
               trailing: const Icon(Icons.chevron_right),
               onTap: () => _editPort(
                 context,
-                'HTTP Port',
+                'HTTP 端口',
                 settings.httpPort,
                 (v) => settings.setHttpPort(v),
               ),
             ),
             const Divider(height: 1),
             SwitchListTile(
-              title: const Text('Allow LAN'),
-              subtitle: const Text('Accept connections from local network'),
+              title: const Text('允许局域网连接'),
+              subtitle: const Text('接受来自局域网的连接'),
               value: settings.allowLan,
               onChanged: settings.setAllowLan,
               secondary: const Icon(Icons.devices_outlined),
@@ -122,11 +122,11 @@ class SettingsScreen extends StatelessWidget {
         // 默认设置
         _buildSection(
           context,
-          title: 'DEFAULTS',
+          title: '默认设置',
           children: [
             SwitchListTile(
-              title: const Text('Enable FEC'),
-              subtitle: const Text('Forward Error Correction for new servers'),
+              title: const Text('启用 FEC'),
+              subtitle: const Text('新服务器默认开启前向纠错'),
               value: settings.defaultFecEnabled,
               onChanged: settings.setDefaultFecEnabled,
               secondary: const Icon(Icons.healing_outlined),
@@ -134,16 +134,16 @@ class SettingsScreen extends StatelessWidget {
             const Divider(height: 1),
             ListTile(
               leading: const Icon(Icons.tune_outlined),
-              title: const Text('FEC Mode'),
-              subtitle: Text(settings.defaultFecMode.toUpperCase()),
+              title: const Text('FEC 模式'),
+              subtitle: Text(settings.defaultFecMode == 'adaptive' ? '自适应' : '静态'),
               trailing: const Icon(Icons.chevron_right),
               enabled: settings.defaultFecEnabled,
               onTap: () => _selectFecMode(context, settings),
             ),
             const Divider(height: 1),
             SwitchListTile(
-              title: const Text('Enable Multiplexing'),
-              subtitle: const Text('Share connection for new servers'),
+              title: const Text('启用多路复用'),
+              subtitle: const Text('新服务器默认开启多路复用'),
               value: settings.defaultMuxEnabled,
               onChanged: settings.setDefaultMuxEnabled,
               secondary: const Icon(Icons.call_split_outlined),
@@ -155,20 +155,20 @@ class SettingsScreen extends StatelessWidget {
         // 高级
         _buildSection(
           context,
-          title: 'ADVANCED',
+          title: '高级',
           children: [
             ListTile(
               leading: const Icon(Icons.bug_report_outlined),
-              title: const Text('Log Level'),
-              subtitle: Text(settings.logLevel.toUpperCase()),
+              title: const Text('日志级别'),
+              subtitle: Text(_getLogLevelText(settings.logLevel)),
               trailing: const Icon(Icons.chevron_right),
               onTap: () => _selectLogLevel(context, settings),
             ),
             const Divider(height: 1),
             ListTile(
               leading: const Icon(Icons.refresh_outlined),
-              title: const Text('Restart Core'),
-              subtitle: const Text('Restart the proxy core service'),
+              title: const Text('重启内核'),
+              subtitle: const Text('重新启动代理核心服务'),
               trailing: const Icon(Icons.chevron_right),
               onTap: () => _restartCore(context),
             ),
@@ -179,12 +179,12 @@ class SettingsScreen extends StatelessWidget {
         // 关于
         _buildSection(
           context,
-          title: 'ABOUT',
+          title: '关于',
           children: [
             ListTile(
               leading: const Icon(Icons.info_outline),
-              title: const Text('Version'),
-              subtitle: Text('${AppConstants.appVersion} (Core: ${AppConstants.coreVersion})'),
+              title: const Text('版本'),
+              subtitle: Text('${AppConstants.appVersion} (内核: ${AppConstants.coreVersion})'),
             ),
             const Divider(height: 1),
             ListTile(
@@ -197,7 +197,7 @@ class SettingsScreen extends StatelessWidget {
             const Divider(height: 1),
             ListTile(
               leading: const Icon(Icons.bug_report_outlined),
-              title: const Text('Report Issue'),
+              title: const Text('报告问题'),
               subtitle: const Text(AppConstants.issuesUrl),
               trailing: const Icon(Icons.copy, size: 18),
               onTap: () => _copyAndOpenUrl(context, AppConstants.issuesUrl),
@@ -247,7 +247,7 @@ class SettingsScreen extends StatelessWidget {
                 ? Icons.light_mode
                 : Icons.brightness_auto,
       ),
-      title: const Text('Theme'),
+      title: const Text('主题'),
       subtitle: Text(_themeModeText(settings.themeMode)),
       trailing: const Icon(Icons.chevron_right),
       onTap: () => _showThemeDialog(context, settings),
@@ -257,11 +257,26 @@ class SettingsScreen extends StatelessWidget {
   String _themeModeText(ThemeMode mode) {
     switch (mode) {
       case ThemeMode.system:
-        return 'System';
+        return '跟随系统';
       case ThemeMode.light:
-        return 'Light';
+        return '浅色';
       case ThemeMode.dark:
-        return 'Dark';
+        return '深色';
+    }
+  }
+
+  String _getLogLevelText(String level) {
+    switch (level) {
+      case 'debug':
+        return '调试';
+      case 'info':
+        return '信息';
+      case 'warn':
+        return '警告';
+      case 'error':
+        return '错误';
+      default:
+        return level.toUpperCase();
     }
   }
 
@@ -269,13 +284,13 @@ class SettingsScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Theme'),
+        title: const Text('主题'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
-          children: ThemeMode.values.map((mode) {
-            return RadioListTile<ThemeMode>(
-              title: Text(_themeModeText(mode)),
-              value: mode,
+          children: [
+            RadioListTile<ThemeMode>(
+              title: const Text('跟随系统'),
+              value: ThemeMode.system,
               groupValue: settings.themeMode,
               onChanged: (value) {
                 if (value != null) {
@@ -283,8 +298,30 @@ class SettingsScreen extends StatelessWidget {
                   Navigator.pop(ctx);
                 }
               },
-            );
-          }).toList(),
+            ),
+            RadioListTile<ThemeMode>(
+              title: const Text('浅色'),
+              value: ThemeMode.light,
+              groupValue: settings.themeMode,
+              onChanged: (value) {
+                if (value != null) {
+                  settings.setThemeMode(value);
+                  Navigator.pop(ctx);
+                }
+              },
+            ),
+            RadioListTile<ThemeMode>(
+              title: const Text('深色'),
+              value: ThemeMode.dark,
+              groupValue: settings.themeMode,
+              onChanged: (value) {
+                if (value != null) {
+                  settings.setThemeMode(value);
+                  Navigator.pop(ctx);
+                }
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -305,7 +342,7 @@ class SettingsScreen extends StatelessWidget {
         content: TextField(
           controller: controller,
           decoration: const InputDecoration(
-            hintText: 'Enter port number (1-65535)',
+            hintText: '请输入端口号 (1-65535)',
           ),
           keyboardType: TextInputType.number,
           autofocus: true,
@@ -313,7 +350,7 @@ class SettingsScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: const Text('取消'),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -322,13 +359,13 @@ class SettingsScreen extends StatelessWidget {
                 final success = await onSave(port);
                 Navigator.pop(ctx);
                 if (success) {
-                  context.showSnackBar('Port updated. Restart core to apply.');
+                  context.showSnackBar('端口已更新，重启内核后生效');
                 }
               } else {
-                context.showSnackBar('Invalid port number', isError: true);
+                context.showSnackBar('端口号无效', isError: true);
               }
             },
-            child: const Text('Save'),
+            child: const Text('保存'),
           ),
         ],
       ),
@@ -339,13 +376,13 @@ class SettingsScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('FEC Mode'),
+        title: const Text('FEC 模式'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             RadioListTile<String>(
-              title: const Text('Adaptive'),
-              subtitle: const Text('Adjusts based on network conditions'),
+              title: const Text('自适应'),
+              subtitle: const Text('根据网络状况自动调整'),
               value: 'adaptive',
               groupValue: settings.defaultFecMode,
               onChanged: (v) {
@@ -356,8 +393,8 @@ class SettingsScreen extends StatelessWidget {
               },
             ),
             RadioListTile<String>(
-              title: const Text('Static'),
-              subtitle: const Text('Fixed redundancy level'),
+              title: const Text('静态'),
+              subtitle: const Text('固定冗余等级'),
               value: 'static',
               groupValue: settings.defaultFecMode,
               onChanged: (v) {
@@ -374,18 +411,16 @@ class SettingsScreen extends StatelessWidget {
   }
 
   void _selectLogLevel(BuildContext context, SettingsProvider settings) {
-    final levels = ['debug', 'info', 'warn', 'error'];
-
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Log Level'),
+        title: const Text('日志级别'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
-          children: levels.map((level) {
-            return RadioListTile<String>(
-              title: Text(level.toUpperCase()),
-              value: level,
+          children: [
+            RadioListTile<String>(
+              title: const Text('调试'),
+              value: 'debug',
               groupValue: settings.logLevel,
               onChanged: (v) {
                 if (v != null) {
@@ -393,8 +428,41 @@ class SettingsScreen extends StatelessWidget {
                   Navigator.pop(ctx);
                 }
               },
-            );
-          }).toList(),
+            ),
+            RadioListTile<String>(
+              title: const Text('信息'),
+              value: 'info',
+              groupValue: settings.logLevel,
+              onChanged: (v) {
+                if (v != null) {
+                  settings.setLogLevel(v);
+                  Navigator.pop(ctx);
+                }
+              },
+            ),
+            RadioListTile<String>(
+              title: const Text('警告'),
+              value: 'warn',
+              groupValue: settings.logLevel,
+              onChanged: (v) {
+                if (v != null) {
+                  settings.setLogLevel(v);
+                  Navigator.pop(ctx);
+                }
+              },
+            ),
+            RadioListTile<String>(
+              title: const Text('错误'),
+              value: 'error',
+              groupValue: settings.logLevel,
+              onChanged: (v) {
+                if (v != null) {
+                  settings.setLogLevel(v);
+                  Navigator.pop(ctx);
+                }
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -406,41 +474,38 @@ class SettingsScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Restart Core'),
+        title: const Text('重启内核'),
         content: Text(
           connection.isConnected
-              ? 'This will disconnect your current connection. Continue?'
-              : 'This will restart the proxy core service. Continue?',
+              ? '这将断开当前连接。是否继续？'
+              : '这将重启代理核心服务。是否继续？',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: const Text('取消'),
           ),
           ElevatedButton(
             onPressed: () async {
               Navigator.pop(ctx);
-              context.showSnackBar('Restarting core...');
+              context.showSnackBar('正在重启内核...');
               
               final coreService = context.read<CoreService>();
               await coreService.restart();
               
-              context.showSnackBar('Core restarted');
+              context.showSnackBar('内核已重启');
             },
-            child: const Text('Restart'),
+            child: const Text('重启'),
           ),
         ],
       ),
     );
   }
 
-  /// 复制 URL 到剪贴板并尝试打开
   void _copyAndOpenUrl(BuildContext context, String url) async {
-    // 复制到剪贴板
     await Clipboard.setData(ClipboardData(text: url));
-    context.showSnackBar('Copied to clipboard: $url');
+    context.showSnackBar('已复制到剪贴板: $url');
     
-    // 尝试使用系统命令打开 URL
     try {
       if (Platform.isWindows) {
         await Process.run('start', [url], runInShell: true);
