@@ -1,3 +1,6 @@
+// ============================================================
+// lib/screens/home/widgets/connection_card.dart (修复)
+// ============================================================
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -18,7 +21,6 @@ class ConnectionCard extends StatelessWidget {
     final servers = context.watch<ServersProvider>();
     final stats = context.watch<StatsProvider>();
     final isConnected = connection.isConnected;
-    final isConnecting = connection.isConnecting;
 
     return Card(
       child: Padding(
@@ -265,7 +267,6 @@ class ConnectionCard extends StatelessWidget {
       case ConnectionStatus.error:
         return 'Connection Failed';
       case ConnectionStatus.disconnected:
-      default:
         return 'Not Connected';
     }
   }
@@ -280,9 +281,7 @@ class ConnectionCard extends StatelessWidget {
       case ConnectionStatus.error:
         return AppColors.error;
       case ConnectionStatus.disconnected:
-      default:
         return AppColors.textSecondaryLight;
     }
   }
 }
-
