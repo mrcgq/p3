@@ -1,3 +1,6 @@
+// ============================================================
+// lib/screens/servers/widgets/server_tile.dart (中文版 - 完整)
+// ============================================================
 
 import 'package:flutter/material.dart';
 
@@ -96,11 +99,7 @@ class ServerTile extends StatelessWidget {
                         if (server.tls.enabled)
                           _buildTag(context, 'TLS', AppColors.success),
                         if (server.fec.enabled)
-                          _buildTag(
-                            context,
-                            'FEC${server.fec.isAdaptive ? '' : ''}',
-                            AppColors.warning,
-                          ),
+                          _buildTag(context, 'FEC', AppColors.warning),
                         if (server.mux.enabled)
                           _buildTag(context, 'MUX', AppColors.info),
                       ],
@@ -139,7 +138,7 @@ class ServerTile extends StatelessWidget {
                     IconButton(
                       icon: const Icon(Icons.speed, size: 18),
                       onPressed: onPing,
-                      tooltip: 'Test latency',
+                      tooltip: '测试延迟',
                       visualDensity: VisualDensity.compact,
                     ),
                   const SizedBox(height: 4),
@@ -158,7 +157,7 @@ class ServerTile extends StatelessWidget {
                           children: [
                             Icon(Icons.edit, size: 18),
                             SizedBox(width: 12),
-                            Text('Edit'),
+                            Text('编辑'),
                           ],
                         ),
                       ),
@@ -168,7 +167,7 @@ class ServerTile extends StatelessWidget {
                           children: [
                             Icon(Icons.speed, size: 18),
                             SizedBox(width: 12),
-                            Text('Test Latency'),
+                            Text('测试延迟'),
                           ],
                         ),
                       ),
@@ -178,7 +177,7 @@ class ServerTile extends StatelessWidget {
                           children: [
                             Icon(Icons.share, size: 18),
                             SizedBox(width: 12),
-                            Text('Share'),
+                            Text('分享'),
                           ],
                         ),
                       ),
@@ -189,7 +188,7 @@ class ServerTile extends StatelessWidget {
                           children: [
                             Icon(Icons.delete, size: 18, color: AppColors.error),
                             SizedBox(width: 12),
-                            Text('Delete', style: TextStyle(color: AppColors.error)),
+                            Text('删除', style: TextStyle(color: AppColors.error)),
                           ],
                         ),
                       ),
@@ -238,4 +237,3 @@ class ServerTile extends StatelessWidget {
     );
   }
 }
-
