@@ -1,5 +1,5 @@
 
-// 连接状态枚举
+/// 连接状态枚举
 enum ConnectionStatus {
   disconnected,
   connecting,
@@ -8,7 +8,7 @@ enum ConnectionStatus {
   error,
 }
 
-// 连接状态信息
+/// 连接状态信息
 class ConnectionState {
   final ConnectionStatus status;
   final String? errorMessage;
