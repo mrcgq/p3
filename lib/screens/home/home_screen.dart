@@ -1,13 +1,13 @@
+// ============================================================
+// lib/screens/home/home_screen.dart (修复)
+// ============================================================
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/connection_provider.dart';
-import '../../providers/stats_provider.dart';
-import '../../providers/servers_provider.dart';
 import '../../core/services/core_service.dart';
-import '../../theme/colors.dart';
 import 'widgets/connection_card.dart';
 import 'widgets/stats_card.dart';
 import 'widgets/quick_actions.dart';
@@ -73,4 +73,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
