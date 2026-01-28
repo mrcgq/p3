@@ -1,5 +1,5 @@
 // ============================================================
-// lib/core/services/tray_service.dart (修复)
+// lib/core/services/tray_service.dart (中文版)
 // ============================================================
 
 import 'dart:io';
@@ -41,7 +41,7 @@ class TrayService {
       await _systemTray!.initSystemTray(
         title: 'Phantom',
         iconPath: _getIconPath(false),
-        toolTip: 'Phantom - Disconnected',
+        toolTip: 'Phantom - 未连接',
       );
 
       await _buildMenu();
@@ -62,9 +62,9 @@ class TrayService {
       });
 
       _initialized = true;
-      AppLogger.info('TrayService initialized');
+      AppLogger.info('托盘服务已初始化');
     } catch (e, stack) {
-      AppLogger.error('TrayService init failed', e, stack);
+      AppLogger.error('托盘服务初始化失败', e, stack);
     }
   }
 
@@ -73,7 +73,7 @@ class TrayService {
     
     final items = <MenuItemBase>[
       MenuItemLabel(
-        label: 'Show Phantom',
+        label: '显示 Phantom',
         onClicked: (_) => onShow(),
       ),
       MenuSeparator(),
@@ -82,12 +82,12 @@ class TrayService {
     if (onConnect != null && onDisconnect != null) {
       if (_isConnected) {
         items.add(MenuItemLabel(
-          label: 'Disconnect',
+          label: '断开连接',
           onClicked: (_) => onDisconnect!(),
         ));
       } else {
         items.add(MenuItemLabel(
-          label: 'Connect',
+          label: '连接',
           onClicked: (_) => onConnect!(),
         ));
       }
@@ -95,7 +95,7 @@ class TrayService {
     }
 
     items.add(MenuItemLabel(
-      label: 'Quit',
+      label: '退出',
       onClicked: (_) => onQuit(),
     ));
 
@@ -125,13 +125,13 @@ class TrayService {
     try {
       await _systemTray?.setImage(_getIconPath(connected));
       await _systemTray?.setToolTip(
-        connected ? 'Phantom - Connected' : 'Phantom - Disconnected',
+        connected ? 'Phantom - 已连接' : 'Phantom - 未连接',
       );
       await _buildMenu();
       
-      AppLogger.debug('Tray status updated: ${connected ? 'connected' : 'disconnected'}');
+      AppLogger.debug('托盘状态已更新: ${connected ? '已连接' : '未连接'}');
     } catch (e) {
-      AppLogger.warning('Failed to update tray status', e);
+      AppLogger.warning('更新托盘状态失败', e);
     }
   }
 
@@ -140,9 +140,9 @@ class TrayService {
     if (!_initialized) return;
 
     try {
-      AppLogger.info('Notification: $title - $message');
+      AppLogger.info('通知: $title - $message');
     } catch (e) {
-      AppLogger.warning('Failed to show notification', e);
+      AppLogger.warning('显示通知失败', e);
     }
   }
 
