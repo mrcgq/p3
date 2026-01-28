@@ -1,3 +1,6 @@
+// ============================================================
+// lib/screens/home/widgets/quick_actions.dart (修复)
+// ============================================================
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,7 +8,6 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/settings_provider.dart';
 import '../../../providers/connection_provider.dart';
-import '../../../core/services/core_service.dart';
 import '../../../theme/colors.dart';
 import '../../../core/utils/extensions.dart';
 
@@ -16,7 +18,6 @@ class QuickActions extends StatelessWidget {
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsProvider>();
     final connection = context.watch<ConnectionProvider>();
-    final coreService = context.read<CoreService>();
 
     return Card(
       child: Padding(
@@ -181,4 +182,3 @@ class _ActionButton extends StatelessWidget {
     );
   }
 }
-
