@@ -1,5 +1,5 @@
 // ============================================================
-// lib/providers/settings_provider.dart (修复)
+// lib/providers/settings_provider.dart (修复版)
 // ============================================================
 
 import 'package:flutter/material.dart';
@@ -75,10 +75,11 @@ class SettingsProvider extends ChangeNotifier {
 
   Future<void> setLaunchAtStartup(bool value) async {
     try {
+      // launchAtStartup 是 launch_at_startup 包提供的顶级对象
       if (value) {
-        await launchAtStartup.enable();
+        await LaunchAtStartup.instance.enable();
       } else {
-        await launchAtStartup.disable();
+        await LaunchAtStartup.instance.disable();
       }
       await _configService.saveSettings(_settings.copyWith(launchAtStartup: value));
       notifyListeners();
@@ -110,7 +111,6 @@ class SettingsProvider extends ChangeNotifier {
     await _configService.saveSettings(_settings.copyWith(socksPort: port));
     notifyListeners();
     
-    // 需要重启内核才能生效
     return true;
   }
 
@@ -174,15 +174,12 @@ class SettingsProvider extends ChangeNotifier {
 
   // ============ 辅助方法 ============
 
-  /// 检查端口字符串是否有效
   bool isValidPortString(String port) {
     return Settings.isValidPortString(port);
   }
 
-  /// 端口是否需要重启
   bool get requiresRestart => false;
 
-  /// 重置所有设置
   Future<void> resetAll() async {
     await _configService.saveSettings(const Settings());
     notifyListeners();
