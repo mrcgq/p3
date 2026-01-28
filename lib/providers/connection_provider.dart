@@ -1,3 +1,6 @@
+// ============================================================
+// lib/providers/connection_provider.dart (修复)
+// ============================================================
 
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -15,12 +18,12 @@ class ConnectionProvider extends ChangeNotifier {
   final ServersProvider _serversProvider;
   TrayService? _trayService;
 
-  ConnectionState _state = const ConnectionState();
+  AppConnectionState _state = const AppConnectionState();
   StreamSubscription? _connectionSubscription;
   DateTime? _connectedAt;
 
   // Getters
-  ConnectionState get state => _state;
+  AppConnectionState get state => _state;
   ConnectionStatus get status => _state.status;
   String? get errorMessage => _state.errorMessage;
   
@@ -45,7 +48,7 @@ class ConnectionProvider extends ChangeNotifier {
     _trayService = trayService;
   }
 
-  void _onStateChange(ConnectionState newState) {
+  void _onStateChange(AppConnectionState newState) {
     final wasConnected = _state.isConnected;
     _state = newState;
 
@@ -158,4 +161,3 @@ class ConnectionProvider extends ChangeNotifier {
     super.dispose();
   }
 }
-
