@@ -1,5 +1,5 @@
 // ============================================================
-// lib/screens/home/widgets/connection_card.dart (修复)
+// lib/screens/home/widgets/connection_card.dart (中文版)
 // ============================================================
 
 import 'package:flutter/material.dart';
@@ -72,7 +72,7 @@ class ConnectionCard extends StatelessWidget {
               if (isConnected) ...[
                 const SizedBox(height: 8),
                 Text(
-                  'Uptime: ${stats.formattedUptime}',
+                  '运行时间: ${stats.formattedUptime}',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: AppColors.success,
                   ),
@@ -80,7 +80,7 @@ class ConnectionCard extends StatelessWidget {
               ],
             ] else
               Text(
-                'No server selected',
+                '未选择服务器',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                 ),
@@ -241,10 +241,10 @@ class ConnectionCard extends StatelessWidget {
             ],
             Text(
               isConnecting
-                  ? 'Connecting...'
+                  ? '连接中...'
                   : isConnected
-                      ? 'Disconnect'
-                      : 'Connect',
+                      ? '断开连接'
+                      : '连接',
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -259,15 +259,15 @@ class ConnectionCard extends StatelessWidget {
   String _getStatusText(ConnectionStatus status) {
     switch (status) {
       case ConnectionStatus.connected:
-        return 'Protected';
+        return '已保护';
       case ConnectionStatus.connecting:
-        return 'Connecting...';
+        return '连接中...';
       case ConnectionStatus.disconnecting:
-        return 'Disconnecting...';
+        return '断开中...';
       case ConnectionStatus.error:
-        return 'Connection Failed';
+        return '连接失败';
       case ConnectionStatus.disconnected:
-        return 'Not Connected';
+        return '未连接';
     }
   }
 
