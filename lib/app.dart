@@ -1,3 +1,6 @@
+// ============================================================
+// lib/app.dart (修复)
+// ============================================================
 
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -10,7 +13,6 @@ import 'providers/connection_provider.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/servers/servers_screen.dart';
 import 'screens/settings/settings_screen.dart';
-import 'screens/logs/logs_screen.dart';
 import 'core/services/tray_service.dart';
 import 'core/services/core_service.dart';
 import 'core/utils/constants.dart';
@@ -287,4 +289,3 @@ class _WindowButtonState extends State<_WindowButton> {
     );
   }
 }
-
