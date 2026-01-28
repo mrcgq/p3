@@ -1,5 +1,5 @@
 // ============================================================
-// lib/app.dart (修复)
+// lib/app.dart (中文版)
 // ============================================================
 
 import 'dart:io';
@@ -38,17 +38,17 @@ class _PhantomAppState extends State<PhantomApp> with WindowListener {
     NavigationDestination(
       icon: Icon(Icons.home_outlined),
       selectedIcon: Icon(Icons.home),
-      label: 'Home',
+      label: '主页',
     ),
     NavigationDestination(
       icon: Icon(Icons.dns_outlined),
       selectedIcon: Icon(Icons.dns),
-      label: 'Servers',
+      label: '服务器',
     ),
     NavigationDestination(
       icon: Icon(Icons.settings_outlined),
       selectedIcon: Icon(Icons.settings),
-      label: 'Settings',
+      label: '设置',
     ),
   ];
 
@@ -209,7 +209,7 @@ class _TitleBar extends StatelessWidget {
             ),
             if (connection.isConnected)
               Text(
-                ' - Connected',
+                ' - 已连接',
                 style: TextStyle(
                   fontSize: 12,
                   color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
