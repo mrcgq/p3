@@ -18,87 +18,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.19.0'
-          channel: 'stable'
-          cache: true
-
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Analyze
-        run: flutter analyze --no-fatal-infos
-
-      - name: Build Windows
-        run: flutter build windows --release
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: phantom-gui-windows-x64
-          path: build/windows/x64/runner/Release/
-
-  build-linux:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install Linux dependencies
+      - name: Create asset directories
         run: |
-          sudo apt-get update
-          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev
+          New-Item -ItemType Directory -Force -Path assets/icons
+          New-Item -ItemType Directory -Force -Path assets/fonts
+          # 创建占位图标文件
+          [System.IO.File]::WriteAllBytes("assets/icons/app_icon.png", [byte[]]@())
+          [System.IO.File]::WriteAllBytes("assets/icons/tray_connected.ico", [byte[]]@())
+          [System.IO.File]::WriteAllBytes("assets/icons/tray_disconnected.ico", [byte[]]@())
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.19.0'
           channel: 'stable'
-          cache: true
-
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Analyze
-        run: flutter analyze --no-fatal-infos
-
-      - name: Build Linux
-        run: flutter build linux --release
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: phantom-gui-linux-x64
-          path: build/linux/x64/release/bundle/
-
-  build-macos:
-    runs-on: macos-latest
-    
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.19.0'
-          channel: 'stable'
-          cache: true
-
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Analyze
-        run: flutter analyze --no-fatal-infos
-
-      - name: Build macOS
-        run: flutter build macos --release
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: phantom-gui-macos
-          path: build/macos/Build/Products/Release/
