@@ -1,3 +1,6 @@
+# ============================================================
+# pubspec.yaml (修复版)
+# ============================================================
 
 name: phantom_gui
 description: Phantom VPN Client - Next Generation Stealth Proxy Protocol
@@ -44,8 +47,8 @@ dependencies:
   # Animations
   flutter_animate: ^4.3.0
   
-  # Clipboard
-  super_clipboard: ^0.8.4
+  # 移除 super_clipboard，使用 Flutter 内置的 Clipboard
+  # super_clipboard: ^0.8.4  # 已移除 - 与 system_tray 冲突
   
   # QR Code
   qr_flutter: ^4.1.0
@@ -90,4 +93,3 @@ flutter:
           weight: 600
         - asset: assets/fonts/Inter-Bold.ttf
           weight: 700
-
