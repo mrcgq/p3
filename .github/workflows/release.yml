@@ -97,7 +97,7 @@ jobs:
         with:
           flutter-version: '3.19.0'
           channel: 'stable'
-          cache: true
+          cache: false
 
       - name: Enable Linux desktop
         run: flutter config --enable-linux-desktop
@@ -113,8 +113,10 @@ jobs:
           cp assets/icons/app_icon.png assets/icons/tray_connected.png
           cp assets/icons/app_icon.png assets/icons/tray_disconnected.png
 
-      - name: Get dependencies
-        run: flutter pub get
+      - name: Clean and get dependencies
+        run: |
+          flutter clean
+          flutter pub get
 
       - name: Build Linux
         run: flutter build linux --release
