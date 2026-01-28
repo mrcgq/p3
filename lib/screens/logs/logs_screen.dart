@@ -1,3 +1,6 @@
+// ============================================================
+// lib/screens/logs/logs_screen.dart (中文版)
+// ============================================================
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,15 +24,14 @@ class _LogsScreenState extends State<LogsScreen> {
   @override
   void initState() {
     super.initState();
-    // TODO: 订阅日志流
     _addDemoLogs();
   }
 
   void _addDemoLogs() {
     _logs.addAll([
-      LogEntry(level: 'INFO', message: 'Phantom Core started', time: DateTime.now()),
-      LogEntry(level: 'DEBUG', message: 'API server listening on 127.0.0.1:19080', time: DateTime.now()),
-      LogEntry(level: 'INFO', message: 'SOCKS5 server listening on 127.0.0.1:1080', time: DateTime.now()),
+      LogEntry(level: 'INFO', message: 'Phantom 内核已启动', time: DateTime.now()),
+      LogEntry(level: 'DEBUG', message: 'API 服务器监听于 127.0.0.1:19080', time: DateTime.now()),
+      LogEntry(level: 'INFO', message: 'SOCKS5 服务器监听于 127.0.0.1:1080', time: DateTime.now()),
     ]);
   }
 
@@ -47,40 +49,41 @@ class _LogsScreenState extends State<LogsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Logs'),
+        title: const Text('日志'),
         actions: [
           PopupMenuButton<String>(
             icon: const Icon(Icons.filter_list),
+            tooltip: '筛选',
             onSelected: (v) => setState(() => _filter = v),
             itemBuilder: (context) => [
-              const PopupMenuItem(value: 'all', child: Text('All')),
-              const PopupMenuItem(value: 'debug', child: Text('Debug')),
-              const PopupMenuItem(value: 'info', child: Text('Info')),
-              const PopupMenuItem(value: 'warn', child: Text('Warning')),
-              const PopupMenuItem(value: 'error', child: Text('Error')),
+              const PopupMenuItem(value: 'all', child: Text('全部')),
+              const PopupMenuItem(value: 'debug', child: Text('调试')),
+              const PopupMenuItem(value: 'info', child: Text('信息')),
+              const PopupMenuItem(value: 'warn', child: Text('警告')),
+              const PopupMenuItem(value: 'error', child: Text('错误')),
             ],
           ),
           IconButton(
             icon: Icon(_autoScroll ? Icons.vertical_align_bottom : Icons.pause),
             onPressed: () => setState(() => _autoScroll = !_autoScroll),
-            tooltip: _autoScroll ? 'Pause auto-scroll' : 'Resume auto-scroll',
+            tooltip: _autoScroll ? '暂停自动滚动' : '恢复自动滚动',
           ),
           IconButton(
             icon: const Icon(Icons.copy),
             onPressed: _copyLogs,
-            tooltip: 'Copy logs',
+            tooltip: '复制日志',
           ),
           IconButton(
             icon: const Icon(Icons.delete_outline),
             onPressed: () => setState(() => _logs.clear()),
-            tooltip: 'Clear logs',
+            tooltip: '清空日志',
           ),
         ],
       ),
       body: filteredLogs.isEmpty
           ? Center(
               child: Text(
-                'No logs',
+                '暂无日志',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                 ),
@@ -123,7 +126,7 @@ class _LogsScreenState extends State<LogsScreen> {
               borderRadius: BorderRadius.circular(3),
             ),
             child: Text(
-              log.level,
+              _getLevelText(log.level),
               style: TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.w600,
@@ -155,6 +158,22 @@ class _LogsScreenState extends State<LogsScreen> {
         '${time.second.toString().padLeft(2, '0')}';
   }
 
+  String _getLevelText(String level) {
+    switch (level.toLowerCase()) {
+      case 'debug':
+        return '调试';
+      case 'info':
+        return '信息';
+      case 'warn':
+      case 'warning':
+        return '警告';
+      case 'error':
+        return '错误';
+      default:
+        return level;
+    }
+  }
+
   Color _getLevelColor(String level) {
     switch (level.toLowerCase()) {
       case 'debug':
@@ -174,7 +193,7 @@ class _LogsScreenState extends State<LogsScreen> {
   void _copyLogs() {
     final text = _logs.map((l) => '[${_formatTime(l.time)}] [${l.level}] ${l.message}').join('\n');
     Clipboard.setData(ClipboardData(text: text));
-    context.showSnackBar('Logs copied to clipboard');
+    context.showSnackBar('日志已复制到剪贴板');
   }
 }
 
@@ -189,4 +208,3 @@ class LogEntry {
     required this.time,
   });
 }
-
