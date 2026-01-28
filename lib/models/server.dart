@@ -1,3 +1,6 @@
+// ============================================================
+// lib/models/server.dart (兼容服务端和GUI格式)
+// ============================================================
 
 import 'dart:convert';
 
@@ -108,7 +111,7 @@ class Server {
     );
   }
 
-  /// 从 phantom:// 分享链接解析
+  /// 从 phantom:// 分享链接解析（兼容服务端简化格式和GUI完整格式）
   static Server? fromShareLink(String link) {
     try {
       if (!link.startsWith('phantom://')) return null;
@@ -116,7 +119,7 @@ class Server {
       var data = link.substring('phantom://'.length);
       String? name;
 
-      // 提取 fragment 中的名称
+      // 提取 fragment 中的名称（#后面的部分）
       final hashIndex = data.indexOf('#');
       if (hashIndex != -1) {
         name = Uri.decodeComponent(data.substring(hashIndex + 1));
@@ -124,40 +127,155 @@ class Server {
       }
 
       // Base64 解码
-      final json = jsonDecode(utf8.decode(base64Decode(data)));
+      String jsonStr;
+      try {
+        jsonStr = utf8.decode(base64Decode(data));
+      } catch (e) {
+        // 尝试 URL-safe Base64
+        final normalBase64 = data.replaceAll('-', '+').replaceAll('_', '/');
+        jsonStr = utf8.decode(base64Decode(normalBase64));
+      }
+      
+      final json = jsonDecode(jsonStr) as Map<String, dynamic>;
+
+      // ========== 兼容服务端格式 ==========
+      
+      // 地址：服务端用 "server"，GUI用 "address"
+      final address = json['address'] as String? ?? 
+                      json['server'] as String? ?? 
+                      '';
+      
+      if (address.isEmpty) {
+        throw Exception('缺少服务器地址');
+      }
+
+      // PSK
+      final psk = json['psk'] as String? ?? '';
+      if (psk.isEmpty) {
+        throw Exception('缺少PSK');
+      }
+
+      // 端口
+      final tcpPort = json['tcp_port'] as int? ?? 443;
+      final udpPort = json['udp_port'] as int? ?? 54321;
+
+      // 模式：服务端格式没有此字段，默认 udp
+      final mode = json['mode'] as String? ?? 'udp';
+
+      // ========== TLS 配置 ==========
+      // 服务端格式：tls: true/false（布尔值）
+      // GUI格式：tls: {enabled: true, server_name: "...", skip_verify: false}（对象）
+      bool tlsEnabled = true;
+      String? serverName;
+      bool skipVerify = false;
+      
+      final tlsValue = json['tls'];
+      if (tlsValue == null) {
+        tlsEnabled = true;
+        serverName = address;
+      } else if (tlsValue is bool) {
+        // 服务端简化格式
+        tlsEnabled = tlsValue;
+        serverName = address;
+      } else if (tlsValue is Map<String, dynamic>) {
+        // GUI完整格式
+        tlsEnabled = tlsValue['enabled'] as bool? ?? true;
+        serverName = tlsValue['server_name'] as String? ?? address;
+        skipVerify = tlsValue['skip_verify'] as bool? ?? false;
+      }
+
+      // ========== FEC 配置 ==========
+      // 服务端格式：fec: "adaptive"/"static"（字符串）或 true/false（布尔值）
+      // GUI格式：fec: {enabled: true, mode: "adaptive", ...}（对象）
+      bool fecEnabled = true;
+      String fecMode = 'adaptive';
+      int dataShards = 10;
+      int fecShards = 3;
+      int minParity = 1;
+      int maxParity = 8;
+      double targetLoss = 0.01;
+      
+      final fecValue = json['fec'];
+      if (fecValue == null) {
+        fecEnabled = true;
+        fecMode = 'adaptive';
+      } else if (fecValue is String) {
+        // 服务端格式：直接是模式字符串
+        fecEnabled = true;
+        fecMode = fecValue;
+      } else if (fecValue is bool) {
+        // 服务端格式：布尔值
+        fecEnabled = fecValue;
+        fecMode = 'adaptive';
+      } else if (fecValue is Map<String, dynamic>) {
+        // GUI完整格式
+        fecEnabled = fecValue['enabled'] as bool? ?? true;
+        fecMode = fecValue['mode'] as String? ?? 'adaptive';
+        dataShards = fecValue['data_shards'] as int? ?? 10;
+        fecShards = fecValue['fec_shards'] as int? ?? 3;
+        minParity = fecValue['min_parity'] as int? ?? 1;
+        maxParity = fecValue['max_parity'] as int? ?? 8;
+        targetLoss = (fecValue['target_loss'] as num?)?.toDouble() ?? 0.01;
+      }
+
+      // ========== MUX 配置 ==========
+      // 服务端格式：mux: true/false（布尔值）
+      // GUI格式：mux: {enabled: true, max_streams: 256}（对象）
+      bool muxEnabled = true;
+      int maxStreams = 256;
+      int streamBuffer = 65536;
+      
+      final muxValue = json['mux'];
+      if (muxValue == null) {
+        muxEnabled = true;
+      } else if (muxValue is bool) {
+        // 服务端简化格式
+        muxEnabled = muxValue;
+      } else if (muxValue is Map<String, dynamic>) {
+        // GUI完整格式
+        muxEnabled = muxValue['enabled'] as bool? ?? true;
+        maxStreams = muxValue['max_streams'] as int? ?? 256;
+        streamBuffer = muxValue['stream_buffer'] as int? ?? 65536;
+      }
+
+      // 使用地址作为默认名称
+      final serverName2 = name ?? json['name'] as String? ?? address;
 
       return Server(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
-        name: name ?? json['address'] ?? 'Imported Server',
-        address: json['address'] as String,
-        tcpPort: json['tcp_port'] as int? ?? 443,
-        udpPort: json['udp_port'] as int? ?? 54321,
-        psk: json['psk'] as String,
-        mode: json['mode'] as String? ?? 'udp',
+        name: serverName2,
+        address: address,
+        tcpPort: tcpPort,
+        udpPort: udpPort,
+        psk: psk,
+        mode: mode,
         tls: TLSConfig(
-          enabled: json['tls']?['enabled'] as bool? ?? true,
-          serverName: json['tls']?['server_name'] as String?,
-          skipVerify: json['tls']?['skip_verify'] as bool? ?? false,
+          enabled: tlsEnabled,
+          serverName: serverName,
+          skipVerify: skipVerify,
         ),
         fec: FECConfig(
-          enabled: json['fec']?['enabled'] as bool? ?? true,
-          mode: json['fec']?['mode'] as String? ?? 'adaptive',
-          dataShards: json['fec']?['data_shards'] as int? ?? 10,
-          fecShards: json['fec']?['fec_shards'] as int? ?? 3,
-          minParity: json['fec']?['min_parity'] as int? ?? 1,
-          maxParity: json['fec']?['max_parity'] as int? ?? 8,
+          enabled: fecEnabled,
+          mode: fecMode,
+          dataShards: dataShards,
+          fecShards: fecShards,
+          minParity: minParity,
+          maxParity: maxParity,
+          targetLoss: targetLoss,
         ),
         mux: MuxConfig(
-          enabled: json['mux']?['enabled'] as bool? ?? true,
-          maxStreams: json['mux']?['max_streams'] as int? ?? 256,
+          enabled: muxEnabled,
+          maxStreams: maxStreams,
+          streamBuffer: streamBuffer,
         ),
       );
     } catch (e) {
+      print('解析分享链接失败: $e');
       return null;
     }
   }
 
-  /// 生成 phantom:// 分享链接
+  /// 生成 phantom:// 分享链接（GUI完整格式）
   String toShareLink() {
     final json = {
       'address': address,
@@ -182,6 +300,23 @@ class Server {
         'enabled': mux.enabled,
         'max_streams': mux.maxStreams,
       },
+    };
+
+    final encoded = base64Encode(utf8.encode(jsonEncode(json)));
+    return 'phantom://$encoded#${Uri.encodeComponent(name)}';
+  }
+
+  /// 生成服务端兼容的简化分享链接
+  String toSimpleShareLink() {
+    final json = {
+      'version': 1,
+      'server': address,
+      'tcp_port': tcpPort,
+      'udp_port': udpPort,
+      'psk': psk,
+      'tls': tls.enabled,
+      'fec': fec.enabled ? fec.mode : false,
+      'mux': mux.enabled,
     };
 
     final encoded = base64Encode(utf8.encode(jsonEncode(json)));
