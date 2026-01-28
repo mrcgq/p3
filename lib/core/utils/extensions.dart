@@ -1,3 +1,6 @@
+// ============================================================
+// lib/core/utils/extensions.dart (中文版)
+// ============================================================
 
 import 'package:flutter/material.dart';
 
@@ -62,11 +65,11 @@ extension IntExtensions on int {
 
   /// 格式化持续时间
   String formatDuration() {
-    if (this < 60) return '${this}s';
-    if (this < 3600) return '${this ~/ 60}m ${this % 60}s';
+    if (this < 60) return '${this}秒';
+    if (this < 3600) return '${this ~/ 60}分${this % 60}秒';
     final hours = this ~/ 3600;
     final minutes = (this % 3600) ~/ 60;
-    return '${hours}h ${minutes}m';
+    return '${hours}时${minutes}分';
   }
 
   /// 格式化毫秒延迟
@@ -77,9 +80,9 @@ extension IntExtensions on int {
 extension DurationExtensions on Duration {
   /// 格式化为人类可读
   String formatHuman() {
-    if (inSeconds < 60) return '${inSeconds}s';
-    if (inMinutes < 60) return '${inMinutes}m ${inSeconds % 60}s';
-    return '${inHours}h ${inMinutes % 60}m';
+    if (inSeconds < 60) return '${inSeconds}秒';
+    if (inMinutes < 60) return '${inMinutes}分${inSeconds % 60}秒';
+    return '${inHours}时${inMinutes % 60}分';
   }
 }
 
@@ -118,4 +121,3 @@ extension BuildContextExtensions on BuildContext {
     );
   }
 }
-
