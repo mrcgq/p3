@@ -1,3 +1,6 @@
+// ============================================================
+// lib/screens/home/widgets/stats_card.dart (中文版)
+// ============================================================
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +41,7 @@ class StatsCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 10),
                 Text(
-                  'Statistics',
+                  '流量统计',
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -96,7 +99,7 @@ class StatsCard extends StatelessWidget {
                   child: _buildStatItem(
                     context,
                     icon: Icons.arrow_upward,
-                    label: 'Upload',
+                    label: '上传',
                     speed: stats.formattedUploadSpeed,
                     total: stats.formattedUpload,
                     color: AppColors.primary,
@@ -107,7 +110,7 @@ class StatsCard extends StatelessWidget {
                   child: _buildStatItem(
                     context,
                     icon: Icons.arrow_downward,
-                    label: 'Download',
+                    label: '下载',
                     speed: stats.formattedDownloadSpeed,
                     total: stats.formattedDownload,
                     color: AppColors.success,
@@ -128,7 +131,7 @@ class StatsCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 6),
                 Text(
-                  'Active connections: ${stats.connections}',
+                  '活跃连接数: ${stats.connections}',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                   ),
@@ -167,7 +170,7 @@ class StatsCard extends StatelessWidget {
         minY: 0,
         maxY: maxY,
         lineBarsData: [
-          // Download
+          // 下载
           LineChartBarData(
             spots: downloadData.asMap().entries.map((e) {
               return FlSpot(e.key.toDouble(), e.value / 1024 / 1024);
@@ -190,7 +193,7 @@ class StatsCard extends StatelessWidget {
               ),
             ),
           ),
-          // Upload
+          // 上传
           LineChartBarData(
             spots: uploadData.asMap().entries.map((e) {
               return FlSpot(e.key.toDouble(), e.value / 1024 / 1024);
@@ -270,7 +273,7 @@ class StatsCard extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Total: $total',
+            '累计: $total',
             style: TextStyle(
               fontSize: 11,
               color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
@@ -281,5 +284,3 @@ class StatsCard extends StatelessWidget {
     );
   }
 }
-
-
