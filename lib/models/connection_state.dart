@@ -1,3 +1,6 @@
+// ============================================================
+// lib/models/connection_state.dart (修复)
+// ============================================================
 
 /// 连接状态枚举
 enum ConnectionStatus {
@@ -8,8 +11,8 @@ enum ConnectionStatus {
   error,
 }
 
-/// 连接状态信息
-class ConnectionState {
+/// 连接状态信息 - 重命名为 AppConnectionState 避免与 Flutter 内置类冲突
+class AppConnectionState {
   final ConnectionStatus status;
   final String? errorMessage;
   final DateTime? connectedAt;
@@ -22,7 +25,7 @@ class ConnectionState {
   final double lossRate;
   final int streamCount;
 
-  const ConnectionState({
+  const AppConnectionState({
     this.status = ConnectionStatus.disconnected,
     this.errorMessage,
     this.connectedAt,
@@ -41,7 +44,7 @@ class ConnectionState {
   bool get isDisconnected => status == ConnectionStatus.disconnected;
   bool get hasError => status == ConnectionStatus.error;
 
-  ConnectionState copyWith({
+  AppConnectionState copyWith({
     ConnectionStatus? status,
     String? errorMessage,
     DateTime? connectedAt,
@@ -54,7 +57,7 @@ class ConnectionState {
     double? lossRate,
     int? streamCount,
   }) {
-    return ConnectionState(
+    return AppConnectionState(
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
       connectedAt: connectedAt ?? this.connectedAt,
@@ -69,8 +72,8 @@ class ConnectionState {
     );
   }
 
-  factory ConnectionState.fromStatusResponse(Map<String, dynamic> json) {
-    return ConnectionState(
+  factory AppConnectionState.fromStatusResponse(Map<String, dynamic> json) {
+    return AppConnectionState(
       status: json['connected'] == true
           ? ConnectionStatus.connected
           : ConnectionStatus.disconnected,
