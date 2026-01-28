@@ -1,3 +1,6 @@
+// ============================================================
+// lib/core/services/core_service.dart (修复)
+// ============================================================
 
 import 'dart:async';
 import 'dart:io';
@@ -10,7 +13,7 @@ import '../utils/logger.dart';
 import 'config_service.dart';
 import '../../models/server.dart';
 import '../../models/stats.dart';
-import '../../models/connection_state.dart' as cs;
+import '../../models/connection_state.dart';
 
 /// 内核服务状态
 enum CoreStatus {
@@ -34,11 +37,11 @@ class CoreService {
   
   // 流控制器
   final _statsController = StreamController<Stats>.broadcast();
-  final _connectionController = StreamController<cs.ConnectionState>.broadcast();
+  final _connectionController = StreamController<AppConnectionState>.broadcast();
   final _coreStatusController = StreamController<CoreStatus>.broadcast();
   
   // 当前状态
-  cs.ConnectionState _connectionState = const cs.ConnectionState();
+  AppConnectionState _connectionState = const AppConnectionState();
   Stats _currentStats = const Stats();
 
   // Getters
@@ -46,12 +49,12 @@ class CoreService {
   String? get lastError => _lastError;
   bool get isRunning => _status == CoreStatus.running;
   bool get isStopped => _status == CoreStatus.stopped;
-  cs.ConnectionState get connectionState => _connectionState;
+  AppConnectionState get connectionState => _connectionState;
   Stats get currentStats => _currentStats;
 
   // Streams
   Stream<Stats> get statsStream => _statsController.stream;
-  Stream<cs.ConnectionState> get connectionStream => _connectionController.stream;
+  Stream<AppConnectionState> get connectionStream => _connectionController.stream;
   Stream<CoreStatus> get coreStatusStream => _coreStatusController.stream;
 
   CoreService(this._configService);
@@ -199,8 +202,8 @@ class CoreService {
     if (stats.connected != _connectionState.isConnected) {
       _connectionState = _connectionState.copyWith(
         status: stats.connected
-            ? cs.ConnectionStatus.connected
-            : cs.ConnectionStatus.disconnected,
+            ? ConnectionStatus.connected
+            : ConnectionStatus.disconnected,
       );
       _connectionController.add(_connectionState);
     }
@@ -209,8 +212,8 @@ class CoreService {
   void _onConnectResult(bool success) {
     _connectionState = _connectionState.copyWith(
       status: success
-          ? cs.ConnectionStatus.connected
-          : cs.ConnectionStatus.error,
+          ? ConnectionStatus.connected
+          : ConnectionStatus.error,
       errorMessage: success ? null : 'Connection failed',
     );
     _connectionController.add(_connectionState);
@@ -233,7 +236,7 @@ class CoreService {
 
     try {
       _connectionState = _connectionState.copyWith(
-        status: cs.ConnectionStatus.connecting,
+        status: ConnectionStatus.connecting,
         errorMessage: null,
       );
       _connectionController.add(_connectionState);
@@ -251,7 +254,7 @@ class CoreService {
       }
 
       _connectionState = _connectionState.copyWith(
-        status: cs.ConnectionStatus.connected,
+        status: ConnectionStatus.connected,
         serverAddress: '${server.address}:${server.activePort}',
         mode: server.mode,
         muxEnabled: server.mux.enabled,
@@ -268,7 +271,7 @@ class CoreService {
       _lastError = e.toString();
       
       _connectionState = _connectionState.copyWith(
-        status: cs.ConnectionStatus.error,
+        status: ConnectionStatus.error,
         errorMessage: e.toString(),
       );
       _connectionController.add(_connectionState);
@@ -283,7 +286,7 @@ class CoreService {
 
     try {
       _connectionState = _connectionState.copyWith(
-        status: cs.ConnectionStatus.disconnected,
+        status: ConnectionStatus.disconnected,
       );
       _connectionController.add(_connectionState);
 
@@ -423,4 +426,3 @@ class CoreService {
     _apiClient.dispose();
   }
 }
-
