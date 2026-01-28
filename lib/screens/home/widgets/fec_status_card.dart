@@ -1,3 +1,6 @@
+// ============================================================
+// lib/screens/home/widgets/fec_status_card.dart (中文版)
+// ============================================================
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,7 +43,7 @@ class FecStatusCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 10),
                 Text(
-                  'FEC Status',
+                  'FEC 状态',
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -53,7 +56,7 @@ class FecStatusCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
-                    state.fecMode?.toUpperCase() ?? 'ADAPTIVE',
+                    state.fecMode == 'adaptive' ? '自适应' : '静态',
                     style: const TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w600,
@@ -71,7 +74,7 @@ class FecStatusCard extends StatelessWidget {
                 Expanded(
                   child: _buildFecStat(
                     context,
-                    label: 'Parity Shards',
+                    label: '校验分片',
                     value: '${stats.currentParity}',
                     icon: Icons.layers,
                     color: AppColors.primary,
@@ -81,7 +84,7 @@ class FecStatusCard extends StatelessWidget {
                 Expanded(
                   child: _buildFecStat(
                     context,
-                    label: 'Loss Rate',
+                    label: '丢包率',
                     value: stats.formattedLossRate,
                     icon: Icons.signal_cellular_alt,
                     color: AppColors.getLossRateColor(stats.lossRate),
@@ -95,7 +98,7 @@ class FecStatusCard extends StatelessWidget {
                 Expanded(
                   child: _buildFecStat(
                     context,
-                    label: 'Recovered',
+                    label: '已恢复',
                     value: '${stats.stats.fecRecovered}',
                     icon: Icons.check_circle_outline,
                     color: AppColors.success,
@@ -105,7 +108,7 @@ class FecStatusCard extends StatelessWidget {
                 Expanded(
                   child: _buildFecStat(
                     context,
-                    label: 'Failed',
+                    label: '恢复失败',
                     value: '${stats.stats.fecFailed}',
                     icon: Icons.error_outline,
                     color: AppColors.error,
@@ -178,7 +181,7 @@ class FecStatusCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Recovery Rate',
+              '恢复率',
               style: TextStyle(
                 fontSize: 12,
                 color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
@@ -208,5 +211,3 @@ class FecStatusCard extends StatelessWidget {
     );
   }
 }
-
-
