@@ -1,3 +1,6 @@
+// ============================================================
+// lib/models/stats.dart (中文版)
+// ============================================================
 
 class Stats {
   final int upload;
@@ -89,15 +92,15 @@ class Stats {
   // 格式化方法
   String get formattedUpload => _formatBytes(upload);
   String get formattedDownload => _formatBytes(download);
-  String get formattedUploadSpeed => '${_formatBytes(uploadSpeed)}/s';
-  String get formattedDownloadSpeed => '${_formatBytes(downloadSpeed)}/s';
+  String get formattedUploadSpeed => '${_formatBytes(uploadSpeed)}/秒';
+  String get formattedDownloadSpeed => '${_formatBytes(downloadSpeed)}/秒';
 
   String get formattedUptime {
-    if (uptime < 60) return '${uptime}s';
-    if (uptime < 3600) return '${uptime ~/ 60}m ${uptime % 60}s';
+    if (uptime < 60) return '${uptime}秒';
+    if (uptime < 3600) return '${uptime ~/ 60}分${uptime % 60}秒';
     final hours = uptime ~/ 3600;
     final minutes = (uptime % 3600) ~/ 60;
-    return '${hours}h ${minutes}m';
+    return '${hours}时${minutes}分';
   }
 
   String get formattedLossRate => '${(lossRate * 100).toStringAsFixed(2)}%';
@@ -121,5 +124,3 @@ class Stats {
     return '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(2)} GB';
   }
 }
-
-
