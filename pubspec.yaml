@@ -1,5 +1,5 @@
 # ============================================================
-# pubspec.yaml (修复版)
+# pubspec.yaml (修复版 - 移除 url_launcher)
 # ============================================================
 
 name: phantom_gui
@@ -35,8 +35,8 @@ dependencies:
   # Launch at Startup
   launch_at_startup: ^0.2.2
   
-  # URL Launcher - 使用最新版本
-  url_launcher: ^6.2.5
+  # 移除 url_launcher，使用 Process.run 替代
+  # url_launcher: ^6.2.5
   
   # Charts
   fl_chart: ^0.66.0
