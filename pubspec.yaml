@@ -1,5 +1,5 @@
 # ============================================================
-# pubspec.yaml (修复版)
+# pubspec.yaml (最终修复版)
 # ============================================================
 
 name: phantom_gui
@@ -76,18 +76,5 @@ flutter_launcher_icons:
 flutter:
   uses-material-design: true
   
-  # 注意：确保这些目录存在，或者注释掉
-  # assets:
-  #   - assets/icons/
-  #   - assets/fonts/
-  
-  # fonts:
-  #   - family: Inter
-  #     fonts:
-  #       - asset: assets/fonts/Inter-Regular.ttf
-  #       - asset: assets/fonts/Inter-Medium.ttf
-  #         weight: 500
-  #       - asset: assets/fonts/Inter-SemiBold.ttf
-  #         weight: 600
-  #       - asset: assets/fonts/Inter-Bold.ttf
-  #         weight: 700
+  assets:
+    - assets/icons/
