@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
-import 'package:path/path.dart' as p;
 
 import 'app.dart';
 import 'providers/connection_provider.dart';
@@ -47,13 +46,11 @@ void main() async {
     });
   }
 
-  // 初始化开机启动 - 使用正确的 API
+  // 初始化开机启动
   if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
     LaunchAtStartup.instance.setup(
       appName: AppConstants.appName,
       appPath: Platform.resolvedExecutable,
-      // Windows 需要设置 packageName
-      packageName: 'com.phantom.gui',
     );
   }
 
