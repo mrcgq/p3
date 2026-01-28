@@ -47,9 +47,6 @@ dependencies:
   # Animations
   flutter_animate: ^4.3.0
   
-  # 移除 super_clipboard，使用 Flutter 内置的 Clipboard
-  # super_clipboard: ^0.8.4  # 已移除 - 与 system_tray 冲突
-  
   # QR Code
   qr_flutter: ^4.1.0
   
@@ -79,17 +76,18 @@ flutter_launcher_icons:
 flutter:
   uses-material-design: true
   
-  assets:
-    - assets/icons/
-    - assets/fonts/
+  # 注意：确保这些目录存在，或者注释掉
+  # assets:
+  #   - assets/icons/
+  #   - assets/fonts/
   
-  fonts:
-    - family: Inter
-      fonts:
-        - asset: assets/fonts/Inter-Regular.ttf
-        - asset: assets/fonts/Inter-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/Inter-SemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/Inter-Bold.ttf
-          weight: 700
+  # fonts:
+  #   - family: Inter
+  #     fonts:
+  #       - asset: assets/fonts/Inter-Regular.ttf
+  #       - asset: assets/fonts/Inter-Medium.ttf
+  #         weight: 500
+  #       - asset: assets/fonts/Inter-SemiBold.ttf
+  #         weight: 600
+  #       - asset: assets/fonts/Inter-Bold.ttf
+  #         weight: 700
