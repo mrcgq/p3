@@ -1,18 +1,20 @@
+// ============================================================
+// lib/core/services/tray_service.dart (修复)
+// ============================================================
 
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:system_tray/system_tray.dart';
 
 import '../utils/logger.dart';
 
-typedef VoidCallback = void Function();
+typedef TrayCallback = void Function();
 
 /// 系统托盘服务
 class TrayService {
-  final VoidCallback onShow;
-  final VoidCallback onQuit;
-  final VoidCallback? onConnect;
-  final VoidCallback? onDisconnect;
+  final TrayCallback onShow;
+  final TrayCallback onQuit;
+  final TrayCallback? onConnect;
+  final TrayCallback? onDisconnect;
 
   SystemTray? _systemTray;
   Menu? _menu;
@@ -138,8 +140,6 @@ class TrayService {
     if (!_initialized) return;
 
     try {
-      // system_tray 不直接支持通知，可以使用其他包如 local_notifier
-      // 这里仅作为示例
       AppLogger.info('Notification: $title - $message');
     } catch (e) {
       AppLogger.warning('Failed to show notification', e);
@@ -154,4 +154,3 @@ class TrayService {
     }
   }
 }
-
