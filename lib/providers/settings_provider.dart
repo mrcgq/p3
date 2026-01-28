@@ -1,3 +1,6 @@
+// ============================================================
+// lib/providers/settings_provider.dart (修复)
+// ============================================================
 
 import 'package:flutter/material.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
@@ -177,7 +180,7 @@ class SettingsProvider extends ChangeNotifier {
   }
 
   /// 端口是否需要重启
-  bool get requiresRestart => false; // 可以追踪端口变更
+  bool get requiresRestart => false;
 
   /// 重置所有设置
   Future<void> resetAll() async {
@@ -185,5 +188,3 @@ class SettingsProvider extends ChangeNotifier {
     notifyListeners();
   }
 }
-
-
