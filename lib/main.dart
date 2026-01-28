@@ -1,9 +1,13 @@
+// ============================================================
+// lib/main.dart (修复版)
+// ============================================================
 
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
+import 'package:path/path.dart' as p;
 
 import 'app.dart';
 import 'providers/connection_provider.dart';
@@ -43,11 +47,13 @@ void main() async {
     });
   }
 
-  // 初始化开机启动
-  if (Platform.isWindows || Platform.isMacOS) {
-    launchAtStartup.setup(
+  // 初始化开机启动 - 使用正确的 API
+  if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+    LaunchAtStartup.instance.setup(
       appName: AppConstants.appName,
       appPath: Platform.resolvedExecutable,
+      // Windows 需要设置 packageName
+      packageName: 'com.phantom.gui',
     );
   }
 
@@ -70,7 +76,6 @@ void main() async {
     await coreService.init();
   } catch (e) {
     AppLogger.error('Failed to initialize core service', e);
-    // 继续运行，用户可以在 UI 中看到错误状态
   }
 
   runApp(
@@ -94,5 +99,3 @@ void main() async {
     ),
   );
 }
-
-
