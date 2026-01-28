@@ -1,5 +1,5 @@
 # ============================================================
-# .github/workflows/release.yml (修复版)
+# .github/workflows/release.yml (完整修复版)
 # ============================================================
 
 name: Release
@@ -19,6 +19,29 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Create asset directories and placeholder files
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path assets/icons
+          New-Item -ItemType Directory -Force -Path assets/fonts
+          
+          $pngBytes = [byte[]]@(
+            0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A,
+            0x00, 0x00, 0x00, 0x0D, 0x49, 0x48, 0x44, 0x52,
+            0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01,
+            0x08, 0x02, 0x00, 0x00, 0x00, 0x90, 0x77, 0x53,
+            0xDE, 0x00, 0x00, 0x00, 0x0C, 0x49, 0x44, 0x41,
+            0x54, 0x08, 0xD7, 0x63, 0xF8, 0xFF, 0xFF, 0x3F,
+            0x00, 0x05, 0xFE, 0x02, 0xFE, 0xDC, 0xCC, 0x59,
+            0xE7, 0x00, 0x00, 0x00, 0x00, 0x49, 0x45, 0x4E,
+            0x44, 0xAE, 0x42, 0x60, 0x82
+          )
+          [System.IO.File]::WriteAllBytes("assets/icons/app_icon.png", $pngBytes)
+          [System.IO.File]::WriteAllBytes("assets/icons/tray_connected.png", $pngBytes)
+          [System.IO.File]::WriteAllBytes("assets/icons/tray_disconnected.png", $pngBytes)
+          Copy-Item "assets/icons/app_icon.png" "assets/icons/tray_connected.ico"
+          Copy-Item "assets/icons/app_icon.png" "assets/icons/tray_disconnected.ico"
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -55,6 +78,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev
 
+      - name: Create asset directories and placeholder files
+        run: |
+          mkdir -p assets/icons
+          mkdir -p assets/fonts
+          printf '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90wS\xde\x00\x00\x00\x0cIDATx\x9cc\xf8\xff\xff?\x00\x05\xfe\x02\xfe\xdc\xccY\xe7\x00\x00\x00\x00IEND\xaeB`\x82' > assets/icons/app_icon.png
+          cp assets/icons/app_icon.png assets/icons/tray_connected.png
+          cp assets/icons/app_icon.png assets/icons/tray_disconnected.png
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -86,6 +117,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Create asset directories and placeholder files
+        run: |
+          mkdir -p assets/icons
+          mkdir -p assets/fonts
+          printf '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90wS\xde\x00\x00\x00\x0cIDATx\x9cc\xf8\xff\xff?\x00\x05\xfe\x02\xfe\xdc\xccY\xe7\x00\x00\x00\x00IEND\xaeB`\x82' > assets/icons/app_icon.png
+          cp assets/icons/app_icon.png assets/icons/tray_connected.png
+          cp assets/icons/app_icon.png assets/icons/tray_disconnected.png
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -116,6 +155,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Create asset directories and placeholder files
+        run: |
+          mkdir -p assets/icons
+          mkdir -p assets/fonts
+          printf '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90wS\xde\x00\x00\x00\x0cIDATx\x9cc\xf8\xff\xff?\x00\x05\xfe\x02\xfe\xdc\xccY\xe7\x00\x00\x00\x00IEND\xaeB`\x82' > assets/icons/app_icon.png
+          cp assets/icons/app_icon.png assets/icons/tray_connected.png
+          cp assets/icons/app_icon.png assets/icons/tray_disconnected.png
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
