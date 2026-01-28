@@ -1,7 +1,11 @@
+// ============================================================
+// lib/screens/settings/settings_screen.dart (修复版 - 不使用 url_launcher)
+// ============================================================
 
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../providers/settings_provider.dart';
 import '../../providers/connection_provider.dart';
@@ -186,15 +190,17 @@ class SettingsScreen extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.code_outlined),
               title: const Text('GitHub'),
-              trailing: const Icon(Icons.open_in_new, size: 18),
-              onTap: () => _openUrl(AppConstants.githubUrl),
+              subtitle: const Text(AppConstants.githubUrl),
+              trailing: const Icon(Icons.copy, size: 18),
+              onTap: () => _copyAndOpenUrl(context, AppConstants.githubUrl),
             ),
             const Divider(height: 1),
             ListTile(
               leading: const Icon(Icons.bug_report_outlined),
               title: const Text('Report Issue'),
-              trailing: const Icon(Icons.open_in_new, size: 18),
-              onTap: () => _openUrl(AppConstants.issuesUrl),
+              subtitle: const Text(AppConstants.issuesUrl),
+              trailing: const Icon(Icons.copy, size: 18),
+              onTap: () => _copyAndOpenUrl(context, AppConstants.issuesUrl),
             ),
           ],
         ),
@@ -428,11 +434,23 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  void _openUrl(String url) async {
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+  /// 复制 URL 到剪贴板并尝试打开
+  void _copyAndOpenUrl(BuildContext context, String url) async {
+    // 复制到剪贴板
+    await Clipboard.setData(ClipboardData(text: url));
+    context.showSnackBar('Copied to clipboard: $url');
+    
+    // 尝试使用系统命令打开 URL
+    try {
+      if (Platform.isWindows) {
+        await Process.run('start', [url], runInShell: true);
+      } else if (Platform.isMacOS) {
+        await Process.run('open', [url]);
+      } else if (Platform.isLinux) {
+        await Process.run('xdg-open', [url]);
+      }
+    } catch (e) {
+      // 如果打开失败，URL 已经复制到剪贴板了
     }
   }
 }
-
