@@ -1,9 +1,9 @@
 // ============================================================
-// lib/screens/servers/servers_screen.dart (修复)
+// lib/screens/servers/servers_screen.dart (中文版)
 // ============================================================
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';  // 添加这行
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 
@@ -31,7 +31,7 @@ class ServersScreen extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  'Servers',
+                  '服务器',
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -64,12 +64,12 @@ class ServersScreen extends StatelessWidget {
                           )
                         : const Icon(Icons.speed, size: 22),
                     onPressed: servers.isPinging ? null : () => servers.pingAllServers(),
-                    tooltip: 'Test all latency',
+                    tooltip: '测试延迟',
                   ),
                 IconButton(
                   icon: const Icon(Icons.add_circle_outline, size: 24),
                   onPressed: () => _showAddServerScreen(context),
-                  tooltip: 'Add server',
+                  tooltip: '添加服务器',
                 ),
               ],
             ),
@@ -137,14 +137,14 @@ class ServersScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              'No Servers Yet',
+              '暂无服务器',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(height: 8),
             Text(
-              'Add a server to start using Phantom',
+              '添加服务器以开始使用 Phantom',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
               ),
@@ -154,7 +154,7 @@ class ServersScreen extends StatelessWidget {
             ElevatedButton.icon(
               onPressed: () => _showAddServerScreen(context),
               icon: const Icon(Icons.add),
-              label: const Text('Add Server'),
+              label: const Text('添加服务器'),
             ),
           ],
         ),
@@ -178,14 +178,14 @@ class ServersScreen extends StatelessWidget {
       showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: const Text('Switch Server'),
+          title: const Text('切换服务器'),
           content: const Text(
-            'You need to disconnect before switching servers. Would you like to disconnect now?',
+            '切换服务器前需要先断开连接。是否立即断开？',
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text('Cancel'),
+              child: const Text('取消'),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -195,7 +195,7 @@ class ServersScreen extends StatelessWidget {
                   context.read<ServersProvider>().selectServer(id);
                 }
               },
-              child: const Text('Disconnect & Switch'),
+              child: const Text('断开并切换'),
             ),
           ],
         ),
@@ -218,23 +218,23 @@ class ServersScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete Server'),
-        content: Text('Are you sure you want to delete "$name"?'),
+        title: const Text('删除服务器'),
+        content: Text('确定要删除 "$name" 吗？'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: const Text('取消'),
           ),
           ElevatedButton(
             onPressed: () {
               context.read<ServersProvider>().deleteServer(id);
               Navigator.pop(ctx);
-              context.showSnackBar('Server deleted');
+              context.showSnackBar('服务器已删除');
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.error,
             ),
-            child: const Text('Delete'),
+            child: const Text('删除'),
           ),
         ],
       ),
@@ -273,7 +273,7 @@ class ShareServerSheet extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Share Server',
+                '分享服务器',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
@@ -321,10 +321,10 @@ class ShareServerSheet extends StatelessWidget {
               onPressed: () {
                 Clipboard.setData(ClipboardData(text: shareLink));
                 Navigator.pop(context);
-                context.showSnackBar('Share link copied');
+                context.showSnackBar('分享链接已复制');
               },
               icon: const Icon(Icons.copy),
-              label: const Text('Copy Link'),
+              label: const Text('复制链接'),
             ),
           ),
           const SizedBox(height: 16),
