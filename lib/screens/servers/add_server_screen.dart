@@ -1,3 +1,6 @@
+// ============================================================
+// lib/screens/servers/add_server_screen.dart (中文版)
+// ============================================================
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,7 +55,6 @@ class _AddServerScreenState extends State<AddServerScreen>
 
     // 加载默认设置
     WidgetsBinding.instance.addPostFrameCallback((_) {
-
       final settings = context.read<SettingsProvider>();
       if (!isEditing) {
         _fecEnabled = settings.defaultFecEnabled;
@@ -95,7 +97,7 @@ class _AddServerScreenState extends State<AddServerScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditing ? 'Edit Server' : 'Add Server'),
+        title: Text(isEditing ? '编辑服务器' : '添加服务器'),
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => Navigator.pop(context),
@@ -103,7 +105,7 @@ class _AddServerScreenState extends State<AddServerScreen>
         actions: [
           TextButton(
             onPressed: _save,
-            child: const Text('Save'),
+            child: const Text('保存'),
           ),
         ],
         bottom: isEditing
@@ -111,8 +113,8 @@ class _AddServerScreenState extends State<AddServerScreen>
             : TabBar(
                 controller: _tabController,
                 tabs: const [
-                  Tab(text: 'Manual'),
-                  Tab(text: 'Import'),
+                  Tab(text: '手动配置'),
+                  Tab(text: '导入'),
                 ],
               ),
       ),
@@ -135,18 +137,18 @@ class _AddServerScreenState extends State<AddServerScreen>
         padding: const EdgeInsets.all(20),
         children: [
           // 基本信息部分
-          _buildSectionTitle('Basic Information'),
+          _buildSectionTitle('基本信息'),
           const SizedBox(height: 12),
 
           // 名称
           TextFormField(
             controller: _nameController,
             decoration: const InputDecoration(
-              labelText: 'Name',
-              hintText: 'My Server',
+              labelText: '名称',
+              hintText: '我的服务器',
               prefixIcon: Icon(Icons.label_outline),
             ),
-            validator: (v) => v?.trim().isEmpty == true ? 'Name is required' : null,
+            validator: (v) => v?.trim().isEmpty == true ? '请输入名称' : null,
             textInputAction: TextInputAction.next,
           ),
           const SizedBox(height: 16),
@@ -155,13 +157,13 @@ class _AddServerScreenState extends State<AddServerScreen>
           TextFormField(
             controller: _addressController,
             decoration: const InputDecoration(
-              labelText: 'Address',
+              labelText: '地址',
               hintText: 'vpn.example.com',
               prefixIcon: Icon(Icons.dns_outlined),
             ),
             validator: (v) {
-              if (v?.trim().isEmpty == true) return 'Address is required';
-              if (!v!.trim().isValidAddress) return 'Invalid address';
+              if (v?.trim().isEmpty == true) return '请输入地址';
+              if (!v!.trim().isValidAddress) return '地址格式无效';
               return null;
             },
             textInputAction: TextInputAction.next,
@@ -175,15 +177,15 @@ class _AddServerScreenState extends State<AddServerScreen>
                 child: TextFormField(
                   controller: _tcpPortController,
                   decoration: const InputDecoration(
-                    labelText: 'TCP Port',
+                    labelText: 'TCP 端口',
                     hintText: '443',
                     prefixIcon: Icon(Icons.lan_outlined),
                   ),
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   validator: (v) {
-                    if (v?.isEmpty == true) return 'Required';
-                    if (!v!.isValidPort) return 'Invalid';
+                    if (v?.isEmpty == true) return '必填';
+                    if (!v!.isValidPort) return '无效';
                     return null;
                   },
                 ),
@@ -193,15 +195,15 @@ class _AddServerScreenState extends State<AddServerScreen>
                 child: TextFormField(
                   controller: _udpPortController,
                   decoration: const InputDecoration(
-                    labelText: 'UDP Port',
+                    labelText: 'UDP 端口',
                     hintText: '54321',
                     prefixIcon: Icon(Icons.lan_outlined),
                   ),
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   validator: (v) {
-                    if (v?.isEmpty == true) return 'Required';
-                    if (!v!.isValidPort) return 'Invalid';
+                    if (v?.isEmpty == true) return '必填';
+                    if (!v!.isValidPort) return '无效';
                     return null;
                   },
                 ),
@@ -214,8 +216,8 @@ class _AddServerScreenState extends State<AddServerScreen>
           TextFormField(
             controller: _pskController,
             decoration: InputDecoration(
-              labelText: 'PSK (Pre-Shared Key)',
-              hintText: 'Base64 encoded key',
+              labelText: 'PSK (预共享密钥)',
+              hintText: 'Base64 编码的密钥',
               prefixIcon: const Icon(Icons.key_outlined),
               suffixIcon: IconButton(
                 icon: Icon(_obscurePsk ? Icons.visibility : Icons.visibility_off),
@@ -224,15 +226,15 @@ class _AddServerScreenState extends State<AddServerScreen>
             ),
             obscureText: _obscurePsk,
             validator: (v) {
-              if (v?.trim().isEmpty == true) return 'PSK is required';
-              if (!v!.trim().isValidBase64) return 'Invalid Base64 format';
+              if (v?.trim().isEmpty == true) return '请输入 PSK';
+              if (!v!.trim().isValidBase64) return 'Base64 格式无效';
               return null;
             },
           ),
           const SizedBox(height: 24),
 
           // 传输模式
-          _buildSectionTitle('Transport Mode'),
+          _buildSectionTitle('传输模式'),
           const SizedBox(height: 12),
           SegmentedButton<String>(
             segments: const [
@@ -253,8 +255,8 @@ class _AddServerScreenState extends State<AddServerScreen>
           const SizedBox(height: 8),
           Text(
             _mode == 'udp'
-                ? 'Faster, recommended for most cases'
-                : 'More reliable in restrictive networks',
+                ? '速度更快，适用于大多数场景'
+                : '更可靠，适用于受限网络环境',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
             ),
@@ -262,11 +264,11 @@ class _AddServerScreenState extends State<AddServerScreen>
           const SizedBox(height: 24),
 
           // TLS 设置
-          _buildSectionTitle('TLS Settings'),
+          _buildSectionTitle('TLS 设置'),
           const SizedBox(height: 12),
           SwitchListTile(
-            title: const Text('Enable TLS'),
-            subtitle: const Text('Encrypt connection with TLS'),
+            title: const Text('启用 TLS'),
+            subtitle: const Text('使用 TLS 加密连接'),
             value: _tlsEnabled,
             onChanged: (v) => setState(() => _tlsEnabled = v),
             contentPadding: EdgeInsets.zero,
@@ -276,15 +278,15 @@ class _AddServerScreenState extends State<AddServerScreen>
             TextFormField(
               controller: _serverNameController,
               decoration: const InputDecoration(
-                labelText: 'Server Name (SNI)',
-                hintText: 'Leave empty to use address',
+                labelText: '服务器名称 (SNI)',
+                hintText: '留空则使用地址',
                 prefixIcon: Icon(Icons.badge_outlined),
               ),
             ),
             const SizedBox(height: 8),
             SwitchListTile(
-              title: const Text('Skip Certificate Verification'),
-              subtitle: const Text('Not recommended for production'),
+              title: const Text('跳过证书验证'),
+              subtitle: const Text('不建议在生产环境使用'),
               value: _tlsSkipVerify,
               onChanged: (v) => setState(() => _tlsSkipVerify = v),
               contentPadding: EdgeInsets.zero,
@@ -306,7 +308,7 @@ class _AddServerScreenState extends State<AddServerScreen>
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Advanced Settings',
+                    '高级设置',
                     style: TextStyle(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w600,
@@ -322,11 +324,11 @@ class _AddServerScreenState extends State<AddServerScreen>
             const SizedBox(height: 16),
 
             // FEC 设置
-            _buildSectionTitle('Forward Error Correction (FEC)'),
+            _buildSectionTitle('前向纠错 (FEC)'),
             const SizedBox(height: 12),
             SwitchListTile(
-              title: const Text('Enable FEC'),
-              subtitle: const Text('Recover lost packets automatically'),
+              title: const Text('启用 FEC'),
+              subtitle: const Text('自动恢复丢失的数据包'),
               value: _fecEnabled,
               onChanged: (v) => setState(() => _fecEnabled = v),
               contentPadding: EdgeInsets.zero,
@@ -337,11 +339,11 @@ class _AddServerScreenState extends State<AddServerScreen>
                 segments: const [
                   ButtonSegment(
                     value: 'adaptive',
-                    label: Text('Adaptive'),
+                    label: Text('自适应'),
                   ),
                   ButtonSegment(
                     value: 'static',
-                    label: Text('Static'),
+                    label: Text('静态'),
                   ),
                 ],
                 selected: {_fecMode},
@@ -350,8 +352,8 @@ class _AddServerScreenState extends State<AddServerScreen>
               const SizedBox(height: 8),
               Text(
                 _fecMode == 'adaptive'
-                    ? 'Automatically adjusts redundancy based on network conditions'
-                    : 'Fixed redundancy level',
+                    ? '根据网络状况自动调整冗余度'
+                    : '固定冗余等级',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                 ),
@@ -360,11 +362,11 @@ class _AddServerScreenState extends State<AddServerScreen>
             const SizedBox(height: 16),
 
             // Mux 设置
-            _buildSectionTitle('Multiplexing'),
+            _buildSectionTitle('多路复用'),
             const SizedBox(height: 12),
             SwitchListTile(
-              title: const Text('Enable Multiplexing'),
-              subtitle: const Text('Share single connection for multiple streams'),
+              title: const Text('启用多路复用'),
+              subtitle: const Text('单连接承载多个数据流'),
               value: _muxEnabled,
               onChanged: (v) => setState(() => _muxEnabled = v),
               contentPadding: EdgeInsets.zero,
@@ -399,7 +401,7 @@ class _AddServerScreenState extends State<AddServerScreen>
           TextField(
             controller: _linkController,
             decoration: const InputDecoration(
-              labelText: 'Share Link',
+              labelText: '分享链接',
               hintText: 'phantom://...',
               prefixIcon: Icon(Icons.link),
             ),
@@ -414,7 +416,7 @@ class _AddServerScreenState extends State<AddServerScreen>
                 child: OutlinedButton.icon(
                   onPressed: _pasteFromClipboard,
                   icon: const Icon(Icons.paste),
-                  label: const Text('Paste'),
+                  label: const Text('粘贴'),
                 ),
               ),
               const SizedBox(width: 12),
@@ -422,7 +424,7 @@ class _AddServerScreenState extends State<AddServerScreen>
                 child: ElevatedButton.icon(
                   onPressed: _importFromLink,
                   icon: const Icon(Icons.download),
-                  label: const Text('Import'),
+                  label: const Text('导入'),
                 ),
               ),
             ],
@@ -450,14 +452,14 @@ class _AddServerScreenState extends State<AddServerScreen>
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Scan QR Code',
+                  '扫描二维码',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Scan a Phantom share QR code',
+                  '扫描 Phantom 分享二维码',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                   ),
@@ -466,7 +468,7 @@ class _AddServerScreenState extends State<AddServerScreen>
                 OutlinedButton.icon(
                   onPressed: _scanQRCode,
                   icon: const Icon(Icons.camera_alt),
-                  label: const Text('Open Camera'),
+                  label: const Text('打开相机'),
                 ),
               ],
             ),
@@ -486,29 +488,27 @@ class _AddServerScreenState extends State<AddServerScreen>
   void _importFromLink() {
     final link = _linkController.text.trim();
     if (link.isEmpty) {
-      context.showSnackBar('Please enter a share link', isError: true);
+      context.showSnackBar('请输入分享链接', isError: true);
       return;
     }
 
     final server = Server.fromShareLink(link);
     if (server == null) {
-      context.showSnackBar('Invalid share link format', isError: true);
+      context.showSnackBar('分享链接格式无效', isError: true);
       return;
     }
 
     context.read<ServersProvider>().addServer(server);
     Navigator.pop(context);
-    context.showSnackBar('Server "${server.name}" added');
+    context.showSnackBar('服务器 "${server.name}" 已添加');
   }
 
   void _scanQRCode() {
-    context.showSnackBar('QR scanning coming soon');
-    // TODO: 实现 QR 扫描
+    context.showSnackBar('二维码扫描功能即将推出');
   }
 
   void _save() {
     if (_tabController.index == 1) {
-      // 导入模式，使用链接导入
       _importFromLink();
       return;
     }
@@ -542,13 +542,12 @@ class _AddServerScreenState extends State<AddServerScreen>
     final servers = context.read<ServersProvider>();
     if (isEditing) {
       servers.updateServer(server);
-      context.showSnackBar('Server updated');
+      context.showSnackBar('服务器已更新');
     } else {
       servers.addServer(server);
-      context.showSnackBar('Server added');
+      context.showSnackBar('服务器已添加');
     }
 
     Navigator.pop(context);
   }
 }
-
