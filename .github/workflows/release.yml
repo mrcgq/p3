@@ -1,5 +1,5 @@
 # ============================================================
-# .github/workflows/release.yml (完整修复版)
+# .github/workflows/release.yml (修复版)
 # ============================================================
 
 name: Release
@@ -73,7 +73,7 @@ jobs:
           path: phantom-gui-windows-x64.zip
 
   build-linux:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     
     steps:
       - name: Checkout
@@ -90,8 +90,7 @@ jobs:
             libgtk-3-dev \
             liblzma-dev \
             libstdc++-12-dev \
-            libayatana-appindicator3-dev \
-            libappindicator3-dev
+            libayatana-appindicator3-dev
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
