@@ -1,8 +1,13 @@
+// ============================================================
+// lib/screens/servers/servers_screen.dart (修复)
+// ============================================================
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';  // 添加这行
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/server.dart';
 import '../../providers/servers_provider.dart';
 import '../../providers/connection_provider.dart';
 import '../../theme/colors.dart';
@@ -200,7 +205,7 @@ class ServersScreen extends StatelessWidget {
     }
   }
 
-  void _editServer(BuildContext context, server) {
+  void _editServer(BuildContext context, Server server) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => AddServerScreen(server: server),
@@ -236,7 +241,7 @@ class ServersScreen extends StatelessWidget {
     );
   }
 
-  void _shareServer(BuildContext context, server) {
+  void _shareServer(BuildContext context, Server server) {
     final link = server.toShareLink();
     showModalBottomSheet(
       context: context,
@@ -328,4 +333,3 @@ class ShareServerSheet extends StatelessWidget {
     );
   }
 }
-
