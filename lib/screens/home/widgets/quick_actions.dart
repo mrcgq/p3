@@ -1,5 +1,5 @@
 // ============================================================
-// lib/screens/home/widgets/quick_actions.dart (修复)
+// lib/screens/home/widgets/quick_actions.dart (中文版)
 // ============================================================
 
 import 'package:flutter/material.dart';
@@ -41,7 +41,7 @@ class QuickActions extends StatelessWidget {
                 ),
                 const SizedBox(width: 10),
                 Text(
-                  'Quick Actions',
+                  '快捷操作',
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -54,7 +54,7 @@ class QuickActions extends StatelessWidget {
                 Expanded(
                   child: _ActionButton(
                     icon: Icons.public,
-                    label: 'System Proxy',
+                    label: '系统代理',
                     isActive: settings.systemProxy,
                     enabled: connection.isConnected,
                     onTap: () async {
@@ -67,11 +67,11 @@ class QuickActions extends StatelessWidget {
                 Expanded(
                   child: _ActionButton(
                     icon: Icons.copy,
-                    label: 'Copy Proxy',
+                    label: '复制代理',
                     onTap: () {
                       final proxy = 'socks5://127.0.0.1:${settings.socksPort}';
                       Clipboard.setData(ClipboardData(text: proxy));
-                      context.showSnackBar('Copied: $proxy');
+                      context.showSnackBar('已复制: $proxy');
                     },
                   ),
                 ),
@@ -83,11 +83,11 @@ class QuickActions extends StatelessWidget {
                 Expanded(
                   child: _ActionButton(
                     icon: Icons.http,
-                    label: 'Copy HTTP',
+                    label: '复制HTTP',
                     onTap: () {
                       final proxy = 'http://127.0.0.1:${settings.httpPort}';
                       Clipboard.setData(ClipboardData(text: proxy));
-                      context.showSnackBar('Copied: $proxy');
+                      context.showSnackBar('已复制: $proxy');
                     },
                   ),
                 ),
@@ -95,7 +95,7 @@ class QuickActions extends StatelessWidget {
                 Expanded(
                   child: _ActionButton(
                     icon: Icons.refresh,
-                    label: 'Reconnect',
+                    label: '重新连接',
                     enabled: connection.isConnected,
                     onTap: () async {
                       await context.read<ConnectionProvider>().reconnect();
